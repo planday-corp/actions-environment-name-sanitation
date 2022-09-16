@@ -1,0 +1,27 @@
+name: Environment name sanitation from git branch name
+description: Sanitize the environment name from the git branch name by removing all non alphanumeric characters
+outputs:
+  environment_name:
+    description: Environment name derivated from the git branch name and sanitized by removing all non alphanumeric characters
+    value: ""
+
+runs:
+  using: composite
+  steps:
+    - id: sanitize_environment_name
+      shell: python3 {0}
+      run: |
+        import re
+        import os
+       
+        # strip the 'refs/heads/' from the branch name
+        branch_name = os.environ["GITHUB_REF"].replace("refs/heads/", "")
+
+        # keep letters and numbers
+        pattern = "[^0-9a-zA-Z\s]+"
+
+        # perform a regex substitution to clean the branch name 
+        # from any charachers except letters and numbers
+        sanitized_branch_name = re.sub(pattern, "", branch_name)
+
+        print("##[set-output name=env;]"+sanitized_branch_name)
