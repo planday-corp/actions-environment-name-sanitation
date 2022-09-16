@@ -1,9 +1,9 @@
 name: Environment name sanitation from git branch name
-description: Sanitize the environment name from the git branch name by removing all non alphanumeric characters
+description: Sanitize the environment name from the git branch name by removing all non alphanumeric characters and add a 'test-' prefix
 outputs:
   environment_name:
-    description: Environment name derivated from the git branch name and sanitized by removing all non alphanumeric characters
-    value: ""
+    description: Environment name derivated from the git branch name and sanitized by removing all non alphanumeric characters with a 'test-' prefix
+    value: "${{steps.sanitize_environment_name.outputs.env}}"
 
 runs:
   using: composite
@@ -24,4 +24,4 @@ runs:
         # from any charachers except letters and numbers
         sanitized_branch_name = re.sub(pattern, "", branch_name)
 
-        print("##[set-output name=env;]"+sanitized_branch_name)
+        print("##[set-output name=env;]test-"+sanitized_branch_name)
