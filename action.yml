@@ -13,9 +13,18 @@ runs:
       run: |
         import re
         import os
+
        
-        # strip the 'refs/heads/' from the branch name
-        branch_name = os.environ["GITHUB_REF"].replace("refs/heads/", "")
+        # GITHUB_HEAD_REF is only set in a pull_request and contains the name of the branch.
+        # ref: https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables
+        if os.environ.get('GITHUB_HEAD_REF') != "":
+          branch_name=os.environ["GITHUB_HEAD_REF"]
+        
+        # GITHUB_REF will contains the branch name that was pushed
+        # in the format of 'refs/heads/<branch_name>'
+        else:
+          # strip the 'refs/heads/' from the branch name
+          branch_name = os.environ["GITHUB_REF"].replace("refs/heads/", "")
 
         # keep letters and numbers
         pattern = "[^0-9a-zA-Z\s]+"
