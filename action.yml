@@ -32,6 +32,6 @@ runs:
 
         # perform a regex substitution to clean the branch name 
         # from any charachers except letters and numbers
-        sanitized_branch_name = re.sub(pattern, "", branch_name)
+        sanitized_branch_name = re.sub(pattern, "", branch_name).lower()
 
         print("##[set-output name=env;]test-"+sanitized_branch_name)
